@@ -99,8 +99,26 @@ func (self *Manifest) AddComment(comment string) {
 	self.Comment += comment
 }
 
+func (self *Manifest) AddCacheFromFile(p string, publicRoot string, prefix string) error {
+	if _, err := os.Stat(p); err != nil {
+		log.Println(err)
+		return err
+	}
+	var itemPath = p[len(publicRoot):]
+	if self.Verbose {
+		log.Println("Adding cache item: ", itemPath)
+	}
+	self.AddCache(prefix + itemPath)
+	self.addedFiles = append(self.addedFiles, p)
+	return nil
+}
+
 func (self *Manifest) AddCacheFromDirectory(root string, publicRoot string, prefix string) error {
 	var err = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
+		if info == nil {
+			log.Println("Can not read:", p)
+			return nil
+		}
 		if info.IsDir() {
 			return nil
 		}
@@ -130,7 +148,6 @@ func (self *Manifest) AddCacheFromDirectory(root string, publicRoot string, pref
 				}
 			*/
 		}
-
 		var itemPath = p[len(publicRoot):]
 		if self.Verbose {
 			log.Println("Adding cache item: ", itemPath)
