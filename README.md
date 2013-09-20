@@ -30,11 +30,11 @@ func init() {
 		manifest.AddCache("/public/css/font-awesome/font/fontawesome-webfont.woff?v=3.2.0")
 		manifest.AddCache("/public/css/font-awesome/font/fontawesome-webfont.ttf?v=3.2.0")
 
-		// manifest.AddCacheFromDirectory("public/src", "public", "/public")
-		manifest.AddCacheFromFile("public/css/main.css", "public", "/public")
-		manifest.AddCacheFromFile("public/css/main.min.css", "public", "/public")
-		manifest.AddCacheFromFile("public/css/font-awesome/css/font-awesome.min.css", "public", "/public")
-		manifest.AddCacheFromDirectory("public/built", "public", "/public")
+        // AddCacheFromFile([local file path], [local base path], [base url])
+		manifest.AddCacheFromFile("local/path/to/public/css/main.css", "local/path/to/public", "/public")
+		manifest.AddCacheFromFile("local/path/to/public/css/main.min.css", "local/path/to/public", "/public")
+		manifest.AddCacheFromFile("local/path/to/public/css/font-awesome/css/font-awesome.min.css", "public", "/public")
+		manifest.AddCacheFromDirectory("app/built", "app", "/public/app")
 
 		manifest.AddNetwork("*")
 
