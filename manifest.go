@@ -40,6 +40,8 @@ const (
 	HgIdChecksum
 )
 
+const MIMEType = "text/cache-manifest"
+
 func chomp(str string) string {
 	return strings.TrimRight(str, "\n\r")
 }
@@ -210,7 +212,7 @@ func (self *Manifest) String() string {
 
 func (self *Manifest) Write(w io.Writer) {
 	if rw, ok := w.(http.ResponseWriter); ok {
-		rw.Header().Set("Content-Type", "text/cache-manifest")
+		rw.Header().Set("Content-Type", MIMEType)
 	}
 	fmt.Fprint(w, self.CacheString())
 }
