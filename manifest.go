@@ -163,30 +163,16 @@ func (self *Manifest) BuildChecksum() string {
 		} else if self.ChecksumType == FileContentChecksum {
 			h := md5.New()
 			for _, file := range self.addedFiles {
-				bytes, err := ioutil.ReadFile(file)
+				contents, err := ioutil.ReadFile(file)
 				if err != nil {
 					log.Println(err)
 				}
-				fmt.Fprint(h, bytes)
+				h.Write([]byte(contents))
 			}
 			return fmt.Sprintf("md5:%x", h.Sum(nil))
 		}
 	}
 	return self.BuildTimestampChecksum()
-	/*
-		directoryContents, _ := ioutil.ReadDir(dir)
-		for _, entry := range directoryContents {
-			if entry.IsDir() {
-				Manifest(fmt.Sprintf("%s/%s", dir, entry.Name()))
-			} else {
-				contents, _ := ioutil.ReadFile(entry.Name())
-				var h hash.Hash = md5.New()
-				var b []byte
-				h.Write([]byte(contents))
-				fmt.Fprintf(buffer, "%s/%s\t%x\n", dir, entry.Name(), h.Sum(b))
-			}
-		}
-	*/
 }
 
 func (self *Manifest) CacheString() string {
@@ -223,26 +209,3 @@ func (self *Manifest) String() string {
 func NewManifest() *Manifest {
 	return &Manifest{}
 }
-
-/*
-func CreateManifestFromDir(dir string) string {
-	buffer := bytes.NewBufferString("")
-
-	directoryContents, _ := ioutil.ReadDir(dir)
-
-	for _, entry := range directoryContents {
-
-		if entry.IsDir() {
-			Manifest(fmt.Sprintf("%s/%s", dir, entry.Name()))
-
-		} else {
-			contents, _ := ioutil.ReadFile(entry.Name())
-			var h hash.Hash = md5.New()
-			var b []byte
-			h.Write([]byte(contents))
-			fmt.Fprintf(buffer, "%s/%s\t%x\n", dir, entry.Name(), h.Sum(b))
-		}
-	}
-	return string(buffer.Bytes())
-}
-*/
