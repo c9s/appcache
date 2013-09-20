@@ -14,37 +14,40 @@ Example
 
 ```go
 import "github.com/c9s/appcache"
-var gManifest = appcache.NewManifest()
+var manifest = appcache.NewManifest()
 
 func init() {
 	if Environment == PRODUCTION {
-		gManifest.SetChecksumType(appcache.GitRevChecksum)
+		manifest.SetChecksumType(appcache.GitRevChecksum)
 
-		gManifest.AddIgnorePattern("\\.html$")
-		gManifest.AddIgnorePattern("\\.htm$")
-		gManifest.AddIgnorePattern("\\.sass-cache")
-		gManifest.AddIgnorePattern(".less$")
-		gManifest.AddIgnorePattern(".sass$")
-		gManifest.AddIgnorePattern(".scss$")
+		manifest.AddIgnorePattern("\\.html$")
+		manifest.AddIgnorePattern("\\.htm$")
+		manifest.AddIgnorePattern("\\.sass-cache")
+		manifest.AddIgnorePattern(".less$")
+		manifest.AddIgnorePattern(".sass$")
+		manifest.AddIgnorePattern(".scss$")
 
-		gManifest.AddCache("/public/css/font-awesome/font/fontawesome-webfont.woff?v=3.2.0")
-		gManifest.AddCache("/public/css/font-awesome/font/fontawesome-webfont.ttf?v=3.2.0")
+		manifest.AddCache("/public/css/font-awesome/font/fontawesome-webfont.woff?v=3.2.0")
+		manifest.AddCache("/public/css/font-awesome/font/fontawesome-webfont.ttf?v=3.2.0")
 
-		// gManifest.AddCacheFromDirectory("public/src", "public", "/public")
-		gManifest.AddCacheFromDirectory("public/css/main.css", "public", "/public")
-		gManifest.AddCacheFromDirectory("public/css/main.min.css", "public", "/public")
-		gManifest.AddCacheFromDirectory("public/css/font-awesome/css/font-awesome.min.css", "public", "/public")
-		gManifest.AddCacheFromDirectory("public/built", "public", "/public")
+		// manifest.AddCacheFromDirectory("public/src", "public", "/public")
+		manifest.AddCacheFromFile("public/css/main.css", "public", "/public")
+		manifest.AddCacheFromFile("public/css/main.min.css", "public", "/public")
+		manifest.AddCacheFromFile("public/css/font-awesome/css/font-awesome.min.css", "public", "/public")
+		manifest.AddCacheFromDirectory("public/built", "public", "/public")
 
-		gManifest.AddNetwork("*")
+		manifest.AddNetwork("*")
 
 		// manifest.AddFallback("/", "/offline")
-		gManifest.SetComment("comment here")
+		manifest.SetComment("comment here")
 	}
 }
 
 func manifestHandler(w http.ResponseWriter, r *http.Request) {
+    manifest.Write(w)
+
+    // same as below
 	w.Header().Set("Content-Type", "text/cache-manifest")
-	fmt.Fprint(w, gManifest.CacheString())
+	fmt.Fprint(w, manifest.CacheString())
 }
 ```
