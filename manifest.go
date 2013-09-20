@@ -9,8 +9,10 @@ import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -204,6 +206,13 @@ func (self *Manifest) String() string {
 		output += "\n# " + strings.Replace(self.Comment, "\n", "\n# ", 0)
 	}
 	return output
+}
+
+func (self *Manifest) Write(w io.Writer) {
+	if rw, ok := w.(http.ResponseWriter); ok {
+		rw.Header().Set("Content-Type", "text/cache-manifest")
+	}
+	fmt.Fprint(w, self.CacheString())
 }
 
 func NewManifest() *Manifest {
