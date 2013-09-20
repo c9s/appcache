@@ -1,10 +1,5 @@
 package appcache
 
-/* package manifest */
-
-/* create a type to have the path (e.g. Name) and checksum, return that,
-   print it out at the end.  Then do it all over in goroutines.  */
-
 import (
 	"bytes"
 	"crypto/md5"
