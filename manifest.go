@@ -29,7 +29,7 @@ type Manifest struct {
 }
 
 const (
-	GitRevChecksum = iota
+	GitRevChecksum = iota + 1
 	TimestampChecksum
 	FileContentChecksum
 	HgIdChecksum
@@ -171,12 +171,16 @@ func (self *Manifest) BuildTimestampChecksum() string {
 func (self *Manifest) BuildChecksum() string {
 	if self.ChecksumType != 0 {
 		if self.ChecksumType == TimestampChecksum {
+			log.Println("Using timestamp checksum.")
 			return self.BuildTimestampChecksum()
 		} else if self.ChecksumType == GitRevChecksum {
+			log.Println("Using gitrev checksum.")
 			return "git:" + GitParseAbbrRev() + ":" + GitParseRev()
 		} else if self.ChecksumType == HgIdChecksum {
+			log.Println("Using hgid checksum.")
 			return "hg:" + HgId()
 		} else if self.ChecksumType == FileContentChecksum {
+			log.Println("Using file content checksum.")
 			h := md5.New()
 			for _, file := range self.addedFiles {
 				contents, err := ioutil.ReadFile(file)
